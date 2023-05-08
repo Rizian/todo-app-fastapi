@@ -10,9 +10,9 @@ class Todo(BaseModel):
     completed: bool = False
 
 class UpdateTodo(BaseModel):
-    title: Optional(str) = None
-    desc: Optional(str) = None
-    completed: Optional(bool) = None
+    title: Optional[str] = None
+    desc: Optional[str] = None
+    completed: Optional[bool] = None
 
 todos_db = {
     1: Todo(title="test", desc="This is just a test", completed=False)
@@ -21,26 +21,26 @@ todos_db = {
 
 @app.get("/")
 async def index():
-    return {"message": "This is a to-do list"}
+    return {"message": "This is a to-do list API"}
 
-@app.get("/get-todos/", Path(description="Returns the entire todo list"))
+@app.get("/get-todos/")
 async def get_todos():
     return todos_db
 
-@app.get("/get-todo/{id}", Path(description="Returns a todo item by id"))
+@app.get("/get-todo/{id}")
 async def get_todo(id: int):
     if id not in todos_db:
         return {"error": "id doesn't exist"}
     return todos_db[id]
 
-@app.post("/create-todo/{id}", Path(description="Creates a new todo item"))
+@app.post("/create-todo/{id}")
 async def create_todo(id: int, todo: Todo):
     if id in todos_db:
         return {"error": "id already exists, cannot overwrite"}
     todos_db[id] = todo
     return todos_db[id]
 
-@app.put("/update-todo/{id}", Path(description="Updates a todo item by id"))
+@app.put("/update-todo/{id}")
 async def update_todo(id: int, student: UpdateTodo):
     if id not in todos_db:
         return {"error": "id doesn't exist"}
@@ -56,7 +56,7 @@ async def update_todo(id: int, student: UpdateTodo):
 
     return todos_db[id]
 
-@app.delete("/delete-todo/{id}", Path(description="Deletes a todo item by id"))
+@app.delete("/delete-todo/{id}")
 async def delete_todo(id: int):
     if id not in todos_db:
         return {"error": "id doesn't exist"}
